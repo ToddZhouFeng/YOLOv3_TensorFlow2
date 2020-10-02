@@ -42,6 +42,8 @@ class ParsePascalVOC(object):
         for o in obj:
             o_list = []
             obj_name = o.getElementsByTagName("name")[0].childNodes[0].data
+            if not PASCAL_VOC_CLASSES.get(obj_name, False):
+                continue
             bndbox = o.getElementsByTagName("bndbox")
             for box in bndbox:
                 xmin = box.getElementsByTagName("xmin")[0].childNodes[0].data
@@ -71,7 +73,10 @@ class ParsePascalVOC(object):
 
     def write_data_to_txt(self, txt_dir):
         for item in os.listdir(self.all_xml_dir):
+            if item[0]==".":
+                continue
             image_name, box_list = self.__parse_xml(xml=item)
+            print(box_list)
             print("Writing information of picture {} to {}".format(image_name, txt_dir))
             # Combine the information into one line.
             line_info = self.__combine_info(image_name, box_list)

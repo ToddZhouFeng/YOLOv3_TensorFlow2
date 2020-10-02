@@ -19,12 +19,12 @@ class GenerateLabel():
         self.true_boxes[..., 2:4] = box_wh / self.input_shape   # Normalization
         true_label_1 = np.zeros((self.batch_size, SCALE_SIZE[0], SCALE_SIZE[0], ANCHOR_NUM_EACH_SCALE, CATEGORY_NUM + 5))
         true_label_2 = np.zeros((self.batch_size, SCALE_SIZE[1], SCALE_SIZE[1], ANCHOR_NUM_EACH_SCALE, CATEGORY_NUM + 5))
-        true_label_3 = np.zeros((self.batch_size, SCALE_SIZE[2], SCALE_SIZE[2], ANCHOR_NUM_EACH_SCALE, CATEGORY_NUM + 5))
+        #true_label_3 = np.zeros((self.batch_size, SCALE_SIZE[2], SCALE_SIZE[2], ANCHOR_NUM_EACH_SCALE, CATEGORY_NUM + 5))
         # true_label : list of 3 arrays of type numpy.ndarray(all elements are 0), which shapes are:
         # (self.batch_size, 13, 13, 3, 5 + C)
         # (self.batch_size, 26, 26, 3, 5 + C)
         # (self.batch_size, 52, 52, 3, 5 + C)
-        true_label = [true_label_1, true_label_2, true_label_3]
+        true_label = [true_label_1, true_label_2]
         # shape : (9, 2) --> (1, 9, 2)
         anchors = np.expand_dims(self.anchors, axis=0)
         # valid_mask filters out the valid boxes.
@@ -42,7 +42,7 @@ class GenerateLabel():
             # shape of best_anchor : [N]
             best_anchor = np.argmax(iou_value, axis=-1)
             for i, n in enumerate(best_anchor):
-                for s in range(ANCHOR_NUM_EACH_SCALE):
+                for s in range(len(SCALE_SIZE)):
                     if n in COCO_ANCHOR_INDEX[s]:
                         x = np.floor(self.true_boxes[b, i, 0] * SCALE_SIZE[s]).astype('int32')
                         y = np.floor(self.true_boxes[b, i, 1] * SCALE_SIZE[s]).astype('int32')

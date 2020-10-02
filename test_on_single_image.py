@@ -19,6 +19,7 @@ def find_class_name(class_id):
 def draw_boxes_on_image(image, boxes, scores, classes):
 
     num_boxes = boxes.shape[0]
+    print(boxes)
     for i in range(num_boxes):
         class_and_score = str(find_class_name(classes[i] + 1)) + ": " + str(scores[i].numpy())
         cv2.rectangle(img=image, pt1=(boxes[i, 0], boxes[i, 1]), pt2=(boxes[i, 2], boxes[i, 3]), color=(255, 0, 0), thickness=2)
@@ -53,6 +54,13 @@ if __name__ == '__main__':
     # inference
     image = single_image_inference(image_dir=test_picture_dir, model=yolo_v3)
 
-    cv2.namedWindow("detect result", flags=cv2.WINDOW_NORMAL)
-    cv2.imshow("detect result", image)
-    cv2.waitKey(0)
+    #cv2.namedWindow("detect result", flags=cv2.WINDOW_NORMAL)
+    #cv2.imshow("detect result", image)
+    #cv2.waitKey(0)
+
+    fig = plt.figure(figsize=(10,10))
+    #img=draw_images("Ichihara_20170929090558")
+    #plt.subplot(1,1,1)
+    plt.axis('off')
+    #plt.title('The image including ' + damageType)
+    plt.imshow(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
