@@ -1,8 +1,8 @@
 # training
 EPOCHS = 2000
-BATCH_SIZE = 8
+BATCH_SIZE = 32
 load_weights_before_training = True
-load_weights_from_epoch = 90
+load_weights_from_epoch = 765
 
 # input image
 IMAGE_HEIGHT = 224
@@ -12,7 +12,10 @@ CHANNELS = 3
 # Dataset
 CATEGORY_NUM = 20
 ANCHOR_NUM_EACH_SCALE = 3
-COCO_ANCHORS = [ [59, 54],  [78,102], [184, 62], [28, 32], [114, 15],  [32, 97]] #[[116, 90], [156, 198], [373, 326], [30, 61], [62, 45], [59, 119], [10, 13], [16, 30], [33, 23]]
+COCO_ANCHORS = [ [59, 54],  [78,102], [184, 62], [28, 32], [114, 15],  [32, 97]] 
+
+#VOC2012[[116, 90], [156, 198], [373, 326], [30, 61], [62, 45], [59, 119], [10, 13], [16, 30], [33, 23]]
+
 COCO_ANCHOR_INDEX = [[0, 1, 2], [3, 4, 5], [6, 7, 8]]
 SCALE_SIZE = [7, 14]
 
@@ -64,7 +67,7 @@ IGNORE_THRESHOLD = 0.5
 
 # NMS
 CONFIDENCE_THRESHOLD = 0.6
-IOU_THRESHOLD = 0.5
+IOU_THRESHOLD = 0.3
 MAX_BOX_NUM = 50
 
 MAX_TRUE_BOX_NUM_PER_IMG = 20
