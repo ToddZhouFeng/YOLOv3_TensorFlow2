@@ -6,12 +6,14 @@ import tensorflow as tf
 
 
 class DarkNetConv2D(tf.keras.layers.Layer):
-    def __init__(self, filters, kernel_size, strides, activation="leaky"):
+    def __init__(self, filters, kernel_size, strides, activation="leaky", groups=1):
         super(DarkNetConv2D, self).__init__()
         self.conv = tf.keras.layers.Conv2D(filters=filters,
                                            kernel_size=kernel_size,
                                            strides=strides,
-                                           padding="same")
+                                           padding="same",
+                                           groups=groups)
+        #self.conv = tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding='SAME', data_format=format)
         self.bn = tf.keras.layers.BatchNormalization()
         if activation == "linear":
             self.activation = 1
@@ -29,7 +31,7 @@ class ResidualBlock(tf.keras.layers.Layer):
     def __init__(self, filters1, filters2):
         super(ResidualBlock, self).__init__()
         self.conv1 = DarkNetConv2D(filters=filters1, kernel_size=(1, 1), strides=1, activation="leaky")
-        self.conv2 = DarkNetConv2D(filters=filters1, kernel_size=(3, 3), strides=1, activation="leaky")
+        self.conv2 = DarkNetConv2D(filters=filters1, kernel_size=(3, 3), strides=1, activation="leaky", groups=filters1)
         self.conv3 = DarkNetConv2D(filters=filters2, kernel_size=(1, 1), strides=1, activation="linear")
         self.dropout1=tf.keras.layers.Dropout(0.15)
 
@@ -44,7 +46,7 @@ class ResidualBlock(tf.keras.layers.Layer):
 
 def make_residual_block(pre_conv_filters1, pre_conv_filters2, filters1,  filters2, num_blocks, pre_conv_strides=1):
     x = tf.keras.Sequential()
-    x.add(DarkNetConv2D(filters=pre_conv_filters1, kernel_size=(3, 3), strides=pre_conv_strides, activation="leaky"))
+    x.add(DarkNetConv2D(filters=pre_conv_filters1, kernel_size=(3, 3), strides=pre_conv_strides, activation="leaky", groups=pre_conv_filters1))
     x.add(DarkNetConv2D(filters=pre_conv_filters2, kernel_size=(1, 1), strides=1, activation="linear"))
 
     for _ in range(num_blocks):
@@ -97,12 +99,12 @@ class YoloFastestBackbone(tf.keras.Model):
 class YOLOTail(tf.keras.layers.Layer):
     def __init__(self, in_channels, out_channels):
         super(YOLOTail, self).__init__()
-        self.conv1 = DarkNetConv2D(filters=in_channels, kernel_size=(1, 1), strides=1)
-        self.conv2 = DarkNetConv2D(filters=in_channels, kernel_size=(3, 3), strides=1)
-        self.conv3 = DarkNetConv2D(filters=in_channels, kernel_size=(3, 3), strides=1, activation="linear")
-        self.conv4 = DarkNetConv2D(filters=4*in_channels/3, kernel_size=(1, 1), strides=1)
-        self.conv5 = DarkNetConv2D(filters=4*in_channels/3, kernel_size=(3, 3), strides=1)
-        self.conv6 = DarkNetConv2D(filters=4*in_channels/3, kernel_size=(3, 3), strides=1)
+        self.conv1 = DarkNetConv2D(filters=in_channels, kernel_size=(1, 1), strides=1, activation="leaky")
+        self.conv2 = DarkNetConv2D(filters=in_channels, kernel_size=(3, 3), strides=1, activation="leaky", groups=in_channels)
+        self.conv3 = DarkNetConv2D(filters=in_channels, kernel_size=(3, 3), strides=1, activation="leaky", groups=in_channels)
+        self.conv4 = DarkNetConv2D(filters=4*in_channels/3, kernel_size=(1, 1), strides=1, activation="linear")
+        self.conv5 = DarkNetConv2D(filters=4*in_channels/3, kernel_size=(3, 3), strides=1, activation="leaky", groups=int(4*in_channels/3))
+        self.conv6 = DarkNetConv2D(filters=4*in_channels/3, kernel_size=(3, 3), strides=1, activation="leaky", groups=int(4*in_channels/3))
         self.conv7 = DarkNetConv2D(filters=4*in_channels/3, kernel_size=(1, 1), strides=1, activation="linear")
         
         self.normal_conv = tf.keras.layers.Conv2D(filters=out_channels,
