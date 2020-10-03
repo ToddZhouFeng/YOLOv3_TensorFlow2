@@ -7,3 +7,4 @@ __pycache__
 /test_data/*
 !/test_data/README.md
 !/test_results_during_training/README.md
+.vscode/settings.json

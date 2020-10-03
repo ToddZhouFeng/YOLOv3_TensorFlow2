@@ -1,6 +1,6 @@
 # training
 EPOCHS = 2000
-BATCH_SIZE = 32
+BATCH_SIZE = 64
 load_weights_before_training = True
 load_weights_from_epoch = 765
 
@@ -67,7 +67,7 @@ IGNORE_THRESHOLD = 0.5
 
 # NMS
 CONFIDENCE_THRESHOLD = 0.6
-IOU_THRESHOLD = 0.3
+IOU_THRESHOLD = 0.2
 MAX_BOX_NUM = 50
 
 MAX_TRUE_BOX_NUM_PER_IMG = 20

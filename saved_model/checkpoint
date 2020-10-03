@@ -1,2 +1,2 @@
-model_checkpoint_path: "epoch-915"
-all_model_checkpoint_paths: "epoch-915"
+model_checkpoint_path: "epoch-865"
+all_model_checkpoint_paths: "epoch-865"
