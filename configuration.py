@@ -1,8 +1,8 @@
 # training
 EPOCHS = 2000
 BATCH_SIZE = 64
-load_weights_before_training = False
-load_weights_from_epoch = 830 #765之后的 ANCHORS 是 yolo-fastest 的顺序
+load_weights_before_training = True
+load_weights_from_epoch = 5 #765之后的 ANCHORS 是 yolo-fastest 的顺序
 
 # input image
 IMAGE_HEIGHT = 224
@@ -10,7 +10,7 @@ IMAGE_WIDTH = 224
 CHANNELS = 3
 
 # Dataset
-CATEGORY_NUM = 20
+CATEGORY_NUM = 8
 ANCHOR_NUM_EACH_SCALE = 3
 COCO_ANCHORS = [[59, 54],  [78,102], [184, 62],[28, 32], [114, 15],  [32, 97]] 
 
