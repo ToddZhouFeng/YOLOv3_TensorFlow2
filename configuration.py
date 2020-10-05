@@ -2,7 +2,7 @@
 EPOCHS = 2000
 BATCH_SIZE = 64
 load_weights_before_training = True
-load_weights_from_epoch = 5 #765之后的 ANCHORS 是 yolo-fastest 的顺序
+load_weights_from_epoch = 80 #765之后的 ANCHORS 是 yolo-fastest 的顺序
 
 # input image
 IMAGE_HEIGHT = 224
