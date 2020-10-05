@@ -8,11 +8,15 @@ import tensorflow as tf
 class DarkNetConv2D(tf.keras.layers.Layer):
     def __init__(self, filters, kernel_size, strides, activation="leaky", groups=1):
         super(DarkNetConv2D, self).__init__()
-        self.conv = tf.keras.layers.Conv2D(filters=filters,
+        if groups != 1:
+            self.conv = tf.keras.layers.DepthwiseConv2D(kernel_size=kernel_size,
+                                                        strides=strides,
+                                                        padding="same")
+        else:
+            self.conv = tf.keras.layers.Conv2D(filters=filters,
                                            kernel_size=kernel_size,
                                            strides=strides,
-                                           padding="same",
-                                           groups=groups)
+                                           padding="same")
         #self.conv = tf.nn.conv2d(input, filter, strides=[1, 1, 1, 1], padding='SAME', data_format=format)
         self.bn = tf.keras.layers.BatchNormalization()
         if activation == "linear":
